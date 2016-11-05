@@ -15,13 +15,18 @@ locking and with intensive work(for example - JSON serialization/deserialization
 data is saved in application cache inner cache whatever is used. But if try analyze as reflections work we'll find what synchronization 
 need only for concurrent access to scalaToJava and javaToScala maps(inner reflections cache).
 
+
+```
 // there synchronyzed must be replace one of concurrent map modifications without doubts
 def enter(j: J, s: S) = synchronized {
     // debugInfo("cached: "+j+"/"+s)
     toScalaMap(j) = new WeakReference(s)
     toJavaMap(s) = new WeakReference(j)
 }
+```
 
+
+```
 // more interesting example: 
 // 1. toScalaMap get replace to concurrent map - is ok
 // 2. enter(key, result) no problem even is that we do multiple invocation from several threads. Because value all the same(we compare only
@@ -37,5 +42,17 @@ def toScala(key: J)(body: => S): S = synchronized {
         result
     }
   }
+```
   
+  # Change concurrent map modification
   
+  I'm view two option:
+   - Collections.synchronizedMap(new WeakHashMap()), current I select this option as semantic equivalent old
+     + \+ save semantic of removing unused values by GC
+     - \- have some synchronization overhead
+     
+   - ConcurrentHashMap - the best solution that I find, but remove weak references require some additional work. I'm not handle it yet
+     + \+ almost full parallelilizm
+     - \- no handling weak references
+     
+ # Test results
