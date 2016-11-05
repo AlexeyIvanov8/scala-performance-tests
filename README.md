@@ -56,3 +56,18 @@ def toScala(key: J)(body: => S): S = synchronized {
      - \- no handling weak references
      
  # Test results
+
+| Test name         | 2.12.0-RC1:throughput | sync WeakHashMap:throughput | ConcurrentHashMap:throughput | threads | Unit   |
+|-------------------|-----------------------|-----------------------------|------------------------------|---------|--------|
+| completeTest1     | 145                   | 260                         | 274                          | 1       | ops/ms |
+| completeTest2     | 183                   | 390                         | 494                          | 2       | ops/ms |
+| completeTest3     | 153                   | 422                         | 663                          | 3       | ops/ms |
+| completeTest4     | 106                   | 313                         | 769                          | 4       | ops/ms |
+| completeTest5     | 98                    | 420                         | 694                          | 8       | ops/ms |
+| simpleTest1       | 1052                  | 1720                        | 1714                         | 1       | ops/ms |
+| simpleTest3       | 852                   | 2547                        | 4682                         | 3       | ops/ms |
+| naiveReflection1  | 55                    | 88                          | 89                           | 1       | ops/ms |
+| naiveReflection3  | 28                    | 36                          | 40                           | 3       | ops/ms |
+| cachedReflection1 | 53548                 | 53472                       | 53036                        | 1       | ops/ms |
+| cachedReflection3 | 59587                 | 60537                       | 60849                        | 3       | ops/ms |
+
