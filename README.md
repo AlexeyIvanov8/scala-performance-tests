@@ -59,10 +59,14 @@ def toScala(key: J)(body: => S): S = synchronized {
  
   My machine have 4 cores, and one of them work with OS and background programs, i.g. 3 cores is free. In this way 4 and more threads no have sensible effect in comparison with 3 threads, and all tests execute with 1 and 3 threads, except completeTest. If you are interesting the results for othre threads number - clone and run! 
  
- completeTest1..8 - emulate real work with reflection.
- simpleTest1,3 - tests with little parsing logic overhead.
- naiveReflection1,3 - getting full reflection data each iteration for access to one field.
- cachedReflection1,3 - access to one field with caching reflection.
+ - completeTest1..8 - emulate real work with reflection. In my opinion, tish is must significant test.
+ 
+ - simpleTest1,3 - tests with little parsing logic overhead.
+ 
+ - naiveReflection1,3 - getting full reflection data each iteration for access to one field.
+ 
+ - cachedReflection1,3 - access to one field with caching reflection.
+ 
 
 | Test name         | 2.12.0-RC1:throughput | sync WeakHashMap:throughput | ConcurrentHashMap:throughput | threads | Unit   |
 |-------------------|-----------------------|-----------------------------|------------------------------|---------|--------|
