@@ -56,6 +56,13 @@ def toScala(key: J)(body: => S): S = synchronized {
      - \- no handling weak references
      
  # Test results
+ 
+  My machine have 4 cores, and one of them work with OS and background programs, i.g. 3 cores is free. In this way 4 and more threads no have sensible effect in comparison with 3 threads, and all tests execute with 1 and 3 threads, except completeTest. If you are interesting the results for othre threads number - clone and run! 
+ 
+ completeTest1..8 - emulate real work with reflection.
+ simpleTest1,3 - tests with little parsing logic overhead.
+ naiveReflection1,3 - getting full reflection data each iteration for access to one field.
+ cachedReflection1,3 - access to one field with caching reflection.
 
 | Test name         | 2.12.0-RC1:throughput | sync WeakHashMap:throughput | ConcurrentHashMap:throughput | threads | Unit   |
 |-------------------|-----------------------|-----------------------------|------------------------------|---------|--------|
@@ -71,3 +78,12 @@ def toScala(key: J)(body: => S): S = synchronized {
 | cachedReflection1 | 53548                 | 53472                       | 53036                        | 1       | ops/ms |
 | cachedReflection3 | 59587                 | 60537                       | 60849                        | 3       | ops/ms |
 
+# Running
+
+After clone project you can select Scala version and run tests:
+
+1. Open build.sbt and select Scala version(default is 2.12.0-RC1):
+> val scalaVersionString = "2.12.0-RC1"
+
+2. Move to project dir and run sbt:
+> sbt clean compile jmh:run
