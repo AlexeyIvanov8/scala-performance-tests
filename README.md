@@ -1,15 +1,16 @@
 # Scala performance tests
 This project created for test some performance aspects of Scala and show need inprovements. 
 
-# Technical note
+## Technical note
 For tests I use JMH benchmarking framework.  
 
 PC configuration.
 
-Intel(R) Core(TM) i5-6600K CPU @ 3.50GHz up to 4.40GHz
-DDR4, single channel, 16Gb, 2133MHz
+CPU: Intel(R) Core(TM) i5-6600K CPU @ 3.50GHz up to 4.40GHz
 
-# Reflection cache synchronization tests
+RAM: DDR4, single channel, 16Gb, 2133MHz
+
+## Reflection cache synchronization tests
 Current time Scala reflection is not optimize for using in multithreading environment. Because work with inner reflection cache wrap by
 locking and with intensive work(for example - JSON serialization/deserialization) threads forced to wait relase lock. Even if reflection 
 data is saved in application cache inner cache whatever is used. But if try analyze as reflections work we'll find what synchronization 
@@ -44,18 +45,18 @@ def toScala(key: J)(body: => S): S = synchronized {
   }
 ```
   
-  # Change concurrent map modification
+## Changes of concurrent map modifications
   
-  I'm view two option:
-   - Collections.synchronizedMap(new WeakHashMap()), current I select this option as semantic equivalent old
-     + \+ save semantic of removing unused values by GC
-     - \- have some synchronization overhead
+I'm view two option:
+  - Collections.synchronizedMap(new WeakHashMap()), current I select this option as semantic equivalent old
+    + \+ save semantic of removing unused values by GC
+    - \- have some synchronization overhead
      
-   - ConcurrentHashMap - the best solution that I find, but remove weak references require some additional work. I'm not handle it yet
-     + \+ almost full parallelilizm
-     - \- no handling weak references
+  - ConcurrentHashMap - the best solution that I find, but remove weak references require some additional work. I'm not handle it yet
+    + \+ almost full parallelilizm
+    - \- no handling weak references
      
- # Test results
+## Test results
  
   My machine have 4 cores, and one of them work with OS and background programs, i.g. 3 cores is free. In this way 4 and more threads no have sensible effect in comparison with 3 threads, and all tests execute with 1 and 3 threads, except completeTest. If you are interesting the results for othre threads number - clone and run! 
  
@@ -82,7 +83,7 @@ def toScala(key: J)(body: => S): S = synchronized {
 | cachedReflection1 | 53548                 | 53472                       | 53036                        | 1       | ops/ms |
 | cachedReflection3 | 59587                 | 60537                       | 60849                        | 3       | ops/ms |
 
-# Running
+## Running
 
 After clone project you can select Scala version and run tests:
 
